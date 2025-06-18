@@ -1,9 +1,20 @@
 import functions_framework
 import pandas as pd
 from flask import jsonify
+from google.cloud import storage
 
-# Load CSV
-df = pd.read_csv('hsn_lookup.csv')
+# Load CSV from Cloud Storage
+def load_csv_from_storage():
+    client = storage.Client()
+    bucket = client.bucket('hsn_csv')
+    blob = bucket.blob('hsn_lookup.csv')
+    
+    # Download to memory and load with pandas
+    csv_data = blob.download_as_text()
+    from io import StringIO
+    return pd.read_csv(StringIO(csv_data))
+
+df = load_csv_from_storage()
 print(f"CSV loaded successfully. Total rows: {len(df)}")
 
 @functions_framework.http
