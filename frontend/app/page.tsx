@@ -49,7 +49,7 @@ export default function Component() {
     setSearchResults([])
 
     try {
-      const response = await fetch(`https://hsnlookup-819029309951.europe-west1.run.app`)
+      const response = await fetch(`https://hsnlookup-819029309951.europe-west1.run.app/?hsn_code=${hsnCode}`)
       const data: ApiResponse = await response.json()
 
       if (response.ok) {
